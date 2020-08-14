@@ -1,16 +1,19 @@
 // 计算字符串(cStr)部分匹配表
 function partialMatchTable(cStr) {
-    let j = 0;
+    let i = 1, j = 0;
     let T = [0];
-    for(let i = 1;i < cStr.length; i++) {
+    do {
         if(cStr[i] === cStr[j]){
             T.push(j+1);
             j++;
-        } else {
+            i++;
+        } else if(j === 0) {
             T.push(0);
-            j = 0;
+            i++;
+        } else {
+            j = T[j-1];
         }
-    }
+    } while (i < cStr.length);
     return T;
 }
 
@@ -30,8 +33,7 @@ function strMatch(pStr, cStr) {
             if(c === 0) {
                 p++;
             } else {
-                p = c - T[c-1] + p;
-                c = 0;
+                c = T[c-1];
             }
         }
     } while(c < cStr.length)
@@ -56,8 +58,7 @@ function strMatchAll(pStr, cStr) {
                 if(c === 0) {
                     p++;
                 } else {
-                    p = c - T[c-1] + p;
-                    c = 0;
+                    c = T[c-1];
                 }
             }
         } while(c < cStr.length)
