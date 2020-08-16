@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑白棋</title>
+</head>
+<style>
+    * {
+        margin: auto;
+        padding: 0;
+    }
+    #container {
+        background-color: lightgreen;
+        width: 800px;
+        height: 800px;
+    }
+    .row {
+        display: flex;
+        width: 100%;
+        height: 100px;
+    }
+    .cell {
+        border: 1px solid;
+        width: 98px;
+        height: 98px;
+    }
+    .disc {
+        width: 80px;
+        height: 80px;
+        border-radius: 40px;
+        margin-top: 10px;
+    }
+    .white {
+        background-color: white;
+    }
+    .black {
+        background-color: black;;
+    }
+    #status {
+        font-size: 5em;
+        display: block;
+        margin : 50px auto;
+    }
+</style>
+<body>
+    <div id="container"></div>
+    <button id="status"></button>
+    <script>
+        // 创建并初始化棋盘
+        let board = [
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0]
+        ];
+
+        // 黑棋先手
+        let currentColor = 1;
+
+        // 落子判断
+        function play ( x, y, cell, board, status) {
+            if (board[x][y] === 0) {
+                board[x][y] = currentColor;
+                let disc = document.createElement('div');
+                disc.className = ( 2 - currentColor ? "disc black" : "disc white");
+                status.innerHTML = ( 2 - currentColor ? "白棋走" : "黑棋走")
+                cell.appendChild(disc)
+                currentColor = 3 - currentColor;
+            } else {
+                alert('落子错误！请重新落子')
+            }
+        }
+        // 横向判断
+        
+        // 竖向判断
+        // 左倾判断
+        // 右倾判断
+
+        // 绘制棋盘
+        let container = document.getElementById('container');
+        let status = document.getElementById('status');
+        status.innerHTML = "黑棋走";
+        for (let y = 0; y < 8; y++) {
+            let row = document.createElement('div');
+            row.className = 'row';
+            container.appendChild(row);
+            for (let x = 0; x < 8; x++) {
+                let cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.addEventListener("click", (event) => {
+                    play( x, y, cell, board, status);
+                })
+                row.appendChild(cell);
+                if (board[y][x] === 1) {
+                    let disc = document.createElement('div');
+                    disc.className = 'disc black';
+                    cell.appendChild(disc);
+                } else if (board[y][x] === 2) {
+                    let disc = document.createElement('div');
+                    disc.className = 'disc white';
+                    cell.appendChild(disc);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
