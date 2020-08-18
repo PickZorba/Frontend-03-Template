@@ -163,9 +163,8 @@ class TrunkedBodyParser {
     }
 
     receiveChar(char) {
-        console.log(this.length);
-        console.log(this.content);
-        console.log(char);
+        // console.log(parseInt(char, 16));
+        // console.log(char);
         if(this.current === this.WAITING_LENGTH) {
             if(char === '\r') {
                 if(this.length === 0) {
@@ -213,6 +212,8 @@ void async function () {
     });
 
     let response = await request.send();
-    console.log(response.body);
-    // let dom = parseHTML.parseHTML(response.body);
+    let dom = parseHTML.parseHTML(response.body);
+
+    console.log(JSON.stringify(dom, null, "    "));
+    console.log('');
 }();
