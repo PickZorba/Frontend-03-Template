@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe</title>
+</head>
+
+<body>
+
+<style>
+    #board {
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        justify-content: center;
+    }
+
+    .cell {
+        font-size: 4em;
+        text-align: center;
+        background-color: lightgreen;
+        border: 1px solid #e5e4e9;
+        line-height: 100px;
+    }
+</style>
+
+    <div id="board"></div>
+
+<script>
+    // 初始化棋盘，并设置先手，默认没有赢家
+    let pattern = [
+        0,0,0,
+        0,0,0,
+        0,0,0
+        ];
+    let color = 1;
+    let winner = false;
+
+    // 用于绘制棋盘的函数
+    function show(){
+        let board = document.getElementById("board");
+        board.innerHTML = "";
+        for(let i = 0; i < pattern.length; i++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.innerText =
+                pattern[i] === 2 ? "❌" :
+                pattern[i] === 1 ? "⭕️" : "";
+            if(pattern[i] === 0 && winner === false) {
+                cell.addEventListener("click", () => move(i));
+            }
+            board.appendChild(cell);
+        }
+    }
+
+    // 用于落子，并重新绘制棋盘，然后判断落完子后，是否产生胜负
+    function move(i) {
+        pattern[i] = color;
+        if(check(pattern, color)) {
+            alert(color === 1 ? "⭕️ is winner!" : "❌ is winner!");
+            winner = true;
+        }
+        show();
+        color = 3 - color;
+        if(predict(pattern, color)) {
+            console.log(color === 1 ? "⭕️ will win!" : "❌ will win!");
+        }
+    }
+
+    // 判断落子以后是否产生胜负
+    function check(pattern, color) {
+        // 对两个斜向进行判断
+        {
+            let win = true;
+            for(let i = 0; i < 3; i++) {
+                if(pattern[3*i + i] !== color) {
+                    win = false;
+                }
+            }
+            if(win) { return true };
+        }
+        {
+            let win = true;
+            for(let i = 0; i < 3; i++) {
+                if(pattern[8 - 3*(2-i) - i] !== color) {
+                    win = false;
+                }
+            }
+            if(win) { return true }
+        }
+        // 对每个横向进行判断
+        {
+            for(let i = 0; i < 3; i++) {
+                let win = true;
+                for(let j = 0; j < 3; j++) {
+                    if(pattern[i*3 + j*1] !== color) {
+                        win = false;
+                    }
+                }
+                if(win) { return true };
+            }
+        }
+        // 对每个竖向进行判断
+        {
+            for(let i = 0; i < 3; i++) {
+                let win = true;
+                for(let j = 0; j < 3; j++) {
+                    if(pattern[i*1 + j*3] !== color) {
+                        win = false;
+                    }
+                }
+                if(win) { return true };
+            }
+        }
+        return false;
+    }
+
+    // 克隆当前的 pattern
+    function clone(pattern) {
+        return pattern.slice();
+    }
+
+    // 预测下一步是否会产生胜负
+    function predict(pattern, color) {
+        for(let i = 0; i < pattern.length; i++) {
+            if(pattern[i] !== 0) { continue }
+            let tmp = clone(pattern);
+            tmp[i] = color;
+            if(check(tmp, color)) { return true }
+        }
+        return false;
+    }
+
+    show();
+</script>
+</body>
+
+</html>
